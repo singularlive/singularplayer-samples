@@ -1,0 +1,65 @@
+<html>
+<head>
+	<script
+  src="https://code.jquery.com/jquery-3.2.1.min.js"
+  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+  crossorigin="anonymous"></script>
+
+	<script src="https://libs.singular.live/singularplayer/0.1.1/singularplayer.js"></script>
+
+</head>
+
+<body style='background-color: white'>
+	<script>
+	
+    var player;
+
+		$(document).ready(function(){	  
+
+			$('#control').hide();
+
+      // create player object from iframe 'splayer'
+		  player = SingularPlayer("splayer");
+
+			player.loadComposition(8413, function compositionLoaded () { 
+				$('#control').show();
+			});
+
+      // Listen to error report
+			player.addListener('error', function(event, msg) {
+				console.log (event, msg);
+			});
+		
+		});
+
+		function setText(id) {
+			var subComp = player.getMainComposition().find(id)[0];
+			if (id == 'Location') {
+				var text = $('#Location').val();
+				subComp.setPayload({location:text});
+			} else if (id== 'Ticker') {
+				var text = $('#Ticker').val();
+				subComp.setPayload({ticker:text});
+			}
+		}
+
+		function showSubcomp(id, show) {
+			var subComp = player.getMainComposition().find(id)[0];
+			if (show || show === undefined)
+				subComp.playTo('In');
+			else
+				subComp.playTo('Out');
+		}
+	</script>
+	<div>
+	
+		<div>
+		<iframe id="splayer" style='width:1280px; height: 720px; border: solid 1px black' src="http://alpha.singular.live/singularplayer/client" ></iframe>		
+		</div>
+		<div style='position:relative; top:5px' id='control'>
+			<div>Location <input type='text' id='Location'><button onclick='setText("Location")'>Set</button><button onclick='showSubcomp("Location")'>Show</button><button onclick='showSubcomp("Location", false)'>Hide</button></div>
+			<div>Ticker <input type='text' id='Ticker'><button onclick='setText("Ticker")'>Set</button><button onclick='showSubcomp("Ticker")'>Show</button><button onclick='showSubcomp("Ticker", false)'>Hide</button></div>
+		</div>
+	</div>
+</body>
+</html>

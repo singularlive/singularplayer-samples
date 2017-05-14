@@ -1,0 +1,61 @@
+<html>
+<head>
+	<script
+  src="https://code.jquery.com/jquery-3.2.1.min.js"
+  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+  crossorigin="anonymous"></script>
+
+	<script src="https://libs.singular.live/singularplayer/0.1.1/singularplayer.js"></script>
+
+</head>
+
+<body style='background-color: white'>
+	
+	<iframe id="splayer" style='width:1280px; height: 720px; position:absolute; top:30px; border: solid 1px black' src="http://alpha.singular.live/singularplayer/client" ></iframe>
+	
+	<script>
+	
+    var player;
+    var sequencer;
+
+		$(document).ready(function(){	  
+
+      // create player object from iframe 'splayer'
+		  player = SingularPlayer("splayer");
+			player.loadComposition(8413, function compositionLoaded () { 
+        var ticker = player.getMainComposition().find('Ticker')[0];
+        ticker.playTo('Out');
+        
+        sequencer = ticker.getSequencer();
+        var payload = [{
+        "beginTime": 5,
+        "endTime": 10,
+        "controlNode": {
+            "payload": {
+              "ticker": "AAAA AAAA AAAA AAAA"
+            }
+          }
+        },{
+        "beginTime": 12,
+        "endTime": 25,
+        "controlNode": {
+          "payload": {
+            "ticker": "BBBB BBBB BBBB BBBB"            
+          }
+        }
+        }];
+        
+        // Set payload to the sequencer
+			  sequencer.setPayload(payload);
+        sequencer.start();
+			});
+
+      // Listen to error report
+			player.addListener('error', function(event, msg) {
+				console.log (event, msg);
+			});
+		
+		});
+	</script>
+</body>
+</html>
