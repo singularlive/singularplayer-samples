@@ -11,7 +11,8 @@
 
 <body style='background-color: white'>
 	
-	<iframe id="splayer" style='width:1280px; height: 720px; position:absolute; top:30px; border: solid 1px black' src="http://alpha.singular.live/singularplayer/client" ></iframe>
+	<iframe id="splayer" style='width:1280px; height: 720px;border: solid 1px black' src="http://alpha.singular.live/singularplayer/client" ></iframe>
+	<div id='status'></div>
 	
 	<script>
 	
@@ -23,12 +24,13 @@
 		  player = SingularPlayer("splayer");
 
 			player.loadComposition(8413, function compositionLoaded () { 
-				console.log('loaded');
+				$('#status').text('composition loaded');
 			});
 
       // Listen to error report
-			player.addListener('error', function(event, msg) {
-				console.log (event, msg);
+			player.addListener('error', function(event, msg) {				
+				if (event == 'error')
+					$('#status').text(msg.error.message);
 			});
 		
 		});

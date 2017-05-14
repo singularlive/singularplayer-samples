@@ -12,6 +12,7 @@
 <body style='background-color: white'>
 	
 	<iframe id="splayer" style='width:1280px; height: 720px; position:absolute; top:30px; border: solid 1px black' src="http://alpha.singular.live/singularplayer/client" ></iframe>
+  <div id='status'></div>
 	
 	<script>
 	
@@ -52,7 +53,8 @@
 
       // Listen to error report
 			player.addListener('error', function(event, msg) {
-				console.log (event, msg);
+        if (event == 'error')
+					$('#status').text(msg.error.message);
 			});
 		
 		});

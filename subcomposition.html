@@ -27,7 +27,8 @@
 
       // Listen to error report
 			player.addListener('error', function(event, msg) {
-				console.log (event, msg);
+				if (event == 'error')
+					$('#status').text(msg.error.message);
 			});
 		
 		});
@@ -56,6 +57,7 @@
 		<div>
 		<iframe id="splayer" style='width:1280px; height: 720px; border: solid 1px black' src="http://alpha.singular.live/singularplayer/client" ></iframe>		
 		</div>
+		<div id='status'></div>
 		<div style='position:relative; top:5px' id='control'>
 			<div>Location <input type='text' id='Location'><button onclick='setText("Location")'>Set</button><button onclick='showSubcomp("Location")'>Show</button><button onclick='showSubcomp("Location", false)'>Hide</button></div>
 			<div>Ticker <input type='text' id='Ticker'><button onclick='setText("Ticker")'>Set</button><button onclick='showSubcomp("Ticker")'>Show</button><button onclick='showSubcomp("Ticker", false)'>Hide</button></div>
