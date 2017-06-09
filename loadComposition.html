@@ -1,39 +1,38 @@
 <html>
+
 <head>
-	<script
-  src="https://code.jquery.com/jquery-3.2.1.min.js"
-  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
-  crossorigin="anonymous"></script>
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+	  crossorigin="anonymous"></script>
 
 	<script src="https://libs.singular.live/singularplayer/0.1.1/singularplayer.js"></script>
 
 </head>
 
 <body style='background-color: white'>
-	
-	<iframe id="splayer" style='width:1280px; height: 720px;border: solid 1px black' src="http://alpha.singular.live/singularplayer/client" ></iframe>
+
+	<iframe id="splayer" style='width:1280px; height: 720px;border: solid 1px black' src="http://beta.singular.live/singularplayer/client"></iframe>
 	<div id='status'></div>
-	
+
 	<script>
-	
-    var player;
+		var player;
 
-		$(document).ready(function(){	  
+		$(document).ready(function () {
 
-      // create player object from iframe 'splayer'
-		  player = SingularPlayer("splayer");
+			// create player object from iframe 'splayer'
+			player = SingularPlayer("splayer");
 
-			player.loadComposition(8413, function compositionLoaded () { 
+			player.loadComposition(8413, function compositionLoaded() {
 				$('#status').text('composition loaded');
 			});
 
-      // Listen to error report
-			player.addListener('error', function(event, msg) {				
+			// Listen to error report
+			player.addListener('error', function (event, msg) {
 				if (event == 'error')
 					$('#status').text(msg.error.message);
 			});
-		
+
 		});
 	</script>
 </body>
+
 </html>
