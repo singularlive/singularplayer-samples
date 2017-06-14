@@ -1,0 +1,59 @@
+<html>
+
+    <head>
+        <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+
+        <!-- Include the Singular Player JavaSrcipt library -->
+        <script src="https://libs.singular.live/singularplayer/0.1.1/singularplayer.js"></script>
+
+    </head>
+
+    <body style='background-color: lightgrey'>
+        <!-- Comments -- START -->
+        <h1>Singular Player SDK - Loading a Composition</h1>
+        <h3>This is an example for hosting the Singular Player in an iFrame and loading a composition.</h3>
+        <p>The composition is referenced by the unique id of the composition. Try following id's to load compositions with different layouts:</p>
+        <ul style="list-style-type:none">
+            <li>ID=8701: Name="Player-SDK-Diner"</li>
+            <li><b>ID=8702: Name="Player-SDK-Spring Forward (default)"</b></li>
+            <li>ID=8703: Name="Player-SDK-Blue"</li>
+            <li>ID=8704: Name="Player-SDK-Strawberry"</li>
+            <li>ID=8705: Name="Player-SDK-Lime"</li>
+            <li>ID=8706: Name="Player-SDK-Lighthouse"</li>
+        </ul>
+
+        <p>Singular Player SDK description: <a href="https://singularlive.zendesk.com/hc/en-us/categories/115000487507-Developer-Documentation">helpdesk.singular.live</a></p>
+        <p>Visit us at: <a href="https://www.singular.live">www.singular.live</a></p>
+        <!-- Comments -- END -->
+
+        <!-- load Singular Player into iFrame -->
+        <iframe id="SingularPlayer" style='width:1280px; height: 720px;border: solid 1px black' src="https://beta.singular.live/singularplayer/client"></iframe>
+        <b><div id='status'></div></b>
+        <h3>Done...</h3>
+
+        <script>
+            // define Singular Player Instance
+            var player;
+
+            $(document).ready(function () {
+
+                // create player object from iframe 'splayer'
+                player = SingularPlayer("SingularPlayer");
+
+                // load composition with a specific id into the player 
+                player.loadComposition(8702, function compositionLoaded() {
+                    $('#status').text('INFO: Composition loaded');
+                });
+
+                // Listen to error report
+                player.addListener('error', function (event, msg) {
+                    if (event == 'error')
+                        $('#status').text("ERROR:" + msg.error.message);
+                });
+
+            });
+        </script>
+
+    </body>
+
+</html>

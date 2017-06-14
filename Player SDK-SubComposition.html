@@ -1,0 +1,160 @@
+<html>
+
+    <head>
+        <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+
+        <!-- Include the Singular Player JavaSrcipt library -->
+        <script src="https://libs.singular.live/singularplayer/0.1.1/singularplayer.js"></script>
+
+    </head>
+
+    <body style='background-color: lightgrey'>
+        <!-- Comments -- START -->
+        <h1>Singular Player SDK - Handling Sub-Compositions</h1>
+        <h3>This example shows how to hosts the Singular Player in an iFrame, load a composition and handle sub-compositions of a composition..</h3>
+        <p>The composition is referenced by the unique id of the composition. Try following id's to load compositions with different layouts:</p>
+        <ul style="list-style-type:none">
+            <li>ID=8701: Name="Player-SDK-Diner"</li>
+            <li><b>ID=8702: Name="Player-SDK-Spring Forward (default)"</b></li>
+            <li>ID=8703: Name="Player-SDK-Blue"</li>
+            <li>ID=8704: Name="Player-SDK-Strawberry"</li>
+            <li>ID=8705: Name="Player-SDK-Lime"</li>
+            <li>ID=8706: Name="Player-SDK-Lighthouse"</li>
+        </ul>
+
+        <p>Singular Player SDK description: <a href="https://singularlive.zendesk.com/hc/en-us/categories/115000487507-Developer-Documentation">helpdesk.singular.live</a></p>
+        <p>Visit us at: <a href="https://www.singular.live">www.singular.live</a></p>
+        <!-- Comments -- END -->
+
+        <script>
+            var player;
+
+            $(document).ready(function () {
+
+                $('#control').hide();
+
+                // create player object from iframe 'splayer'
+                player = SingularPlayer("splayer");
+
+                player.loadComposition(8702, function compositionLoaded() {
+                    $('#control').show();
+                });
+
+                // Listen to error report
+                player.addListener('error', function (event, msg) {
+                    if (event == 'error')
+                        $('#status').text(msg.error.message);
+                });
+
+            });
+
+            function setText(id) {
+                var subComp = player.getMainComposition().find(id)[0];
+                if (id == 'EventBug') {
+                    var text = $('#EventBug').val();
+                    subComp.setPayload({
+                        Event: text
+                    });
+                } else if (id == 'LocationBug') {
+                    var text = $('#LocationBug').val();
+                    subComp.setPayload({
+                        Location: text
+                    });
+                } else if (id == '1 Line Topic Bar') {
+                    var text = $('#1TopicText').val();
+                    subComp.setPayload({
+                        Text: text
+                    });
+                } else if (id == '2 Line Topic Bar') {
+                    var text = $('#2TopicTitle').val();
+                    subComp.setPayload({
+                        Title: text
+                    });
+                    var text = $('#2TopicText').val();
+                    subComp.setPayload({
+                        Text: text
+                    });
+                } else if (id == 'Ticker') {
+                    var text = $('#TickerTitle').val();
+                    subComp.setPayload({
+                        Title: text
+                    });
+                    var text = $('#TickerText').val();
+                    subComp.setPayload({
+                        'Text Field': text
+                    });
+                }
+            }
+
+            function showSubcomp(id, show) {
+                var subComp = player.getMainComposition().find(id)[0];
+                if (show || show === undefined)
+                    subComp.playTo('In');
+                else
+                    subComp.playTo('Out');
+            }
+        </script>
+ 
+        <div>
+
+            <!-- load Singular Player into iFrame -->
+            <div>
+                <iframe id="splayer" style='width:1280px; height: 720px; border: solid 1px black' src="https://beta.singular.live/singularplayer/client"></iframe>
+            </div>
+            <div id='status'></div>
+        
+            <!-- add controls for sub-compositions -->
+            <div style='position:relative; top:5px' id='control'>
+                <div>EventBug 
+                    <input type='text' id='EventBug'>
+                    <button onclick='setText("EventBug")'>Set</button>
+                    <button onclick='showSubcomp("EventBug")'>Show</button>
+                    <button onclick='showSubcomp("EventBug", false)'>Hide</button>
+                </div>
+                <div>LocationBug 
+                    <input type='text' id='LocationBug'>
+                    <button onclick='setText("LocationBug")'>Set</button>
+                    <button onclick='showSubcomp("LocationBug")'>Show</button>
+                    <button onclick='showSubcomp("LocationBug", false)'>Hide</button>
+                </div>
+                <div>1 Line Topic Bar
+                    <input type='text' id='1TopicText'>
+                    <button onclick='setText("1 Line Topic Bar")'>Set</button>
+                    <button onclick='showSubcomp("1 Line Topic Bar")'>Show</button>
+                    <button onclick='showSubcomp("1 Line Topic Bar", false)'>Hide</button>
+                </div>
+                <div>2 Line Topic Bar
+                    <input type='text' id='2TopicTitle'>
+                    <input type='text' id='2TopicText'>
+                    <button onclick='setText("2 Line Topic Bar")'>Set</button>
+                    <button onclick='showSubcomp("2 Line Topic Bar")'>Show</button>
+                    <button onclick='showSubcomp("2 Line Topic Bar", false)'>Hide</button>
+                </div>
+                <div>Ticker 
+                    <input type='text' id='TickerTitle'>
+                    <input type='text' id='TickerText'>
+                    <button onclick='setText("Ticker")'>Set</button>
+                    <button onclick='showSubcomp("Ticker")'>Show</button>
+                    <button onclick='showSubcomp("Ticker", false)'>Hide</button>
+                </div>
+                <div>Side Panel Swap
+                    <button onclick='showSubcomp("Side Panel Picture")'>Show Picture Panel</button>
+                    <button onclick='showSubcomp("Side Panel Picture", false)'>Hide Picture Panel</button>
+                    <button onclick='showSubcomp("Side Panel Text")'>Show Text Panel</button>
+                    <button onclick='showSubcomp("Side Panel Text", false)'>Hide Text Panel</button>
+                </div>
+                <div>Background Image
+                    <button onclick='showSubcomp("BackgroundImage")'>Show Image</button>
+                    <button onclick='showSubcomp("BackgroundImage", false)'>Hide Image</button>
+                </div>
+                <div>Background WebCam
+                    <button onclick='showSubcomp("BackgroundWebCam")'>Show WebCam</button>
+                    <button onclick='showSubcomp("BackgroundWebCam", false)'>Hide WebCam</button>
+                </div>
+            </div>
+        
+        </div>
+        
+    </body>
+
+</html>
