@@ -2,7 +2,7 @@
 
 This document explains how to use the Singular.live Player SDK.
 
-## INTRODUCTION
+## Introduction
 
 The Singular Player SDK provides Java Script libraries to create Singular Player instances, load compositions to the player, 
 set payloads for loaded compositions, trigger animations, define and run sequences specified in a json format.
@@ -11,6 +11,26 @@ If you want to develop Singular Control Apps, Singular Widgets and Custom data s
  - [Singular Widget SDK](https://singularlive.zendesk.com/hc/en-us/articles/115003026388-Singular-Widget-SDK-Documentation)
  - [Singular App SDK](https://singularlive.zendesk.com/hc/en-us/articles/115005838428-Singular-APP-SDK)
  - [Singular REST API](https://singularlive.zendesk.com/hc/en-us/articles/115003104007--REST-API-Description)
+
+## Table of Contents
+
+1. **[Introduction](#introduction)**
+
+1. **[Singular Player - Loading Compositions](#singular-player---loading-compositions)**
+   * [Add the Singular Player SDK path into your code](#add-the-singular-player-sdk-path-into-your-code)
+   * [Add iframe pointing to the player url](#add-iframe-pointing-to-the-player-url)
+   * [Obtain player object from the iframe by the iframe id](#obtain-player-object-from-the-iframe-by-the-iframe-id)
+   * [Load composition identified by the composition id](#load-composition-identified-by-the-composition-id)
+   * [Code example](#code-example)
+
+1. **[Singular Player - Handle SubCompositions](#singular-player---handle-subcompositions)**
+   * [Get SubComposition by id](#get-subcomposition-by-id)
+   * [Set Payload of a SubComposition](#set-payload-of-a-subcomposition)
+   * [Code example](#code-example)
+
+1. **[API Reference](#api-reference)**
+
+1. **[Getting Help](#getting-help)**
 
 ## Singular Player - Loading Compositions
 
