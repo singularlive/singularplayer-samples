@@ -1,5 +1,7 @@
 # Singular Player SDK
 
+Last updated: 2017-06-23
+
 This document explains how to use the Singular.live Player SDK.
 
 ## Introduction
@@ -71,6 +73,8 @@ If you want to develop Singular Control Apps, Singular Widgets and Custom data s
 #### Code example
 
 This code snipplet defines an iFrame, creates a Singular Player object and loads a Singular composition.
+
+Checkout the code example for [´Singular SDK - Load HTML5 Compositions´ on codepen.io](https://codepen.io/singular/pen/LLjxGK). 
 
 ```html
   <!-- load Singular Player into iFrame -->
@@ -144,6 +148,8 @@ Following types of `ControlNodes` exist:
 #### Code Example
 
 This code snipplet creates a Singular Player object, loads a Singular composition and sets the payload of SubCompositions.
+
+Checkout the code example for [´Singular SDK - Control and Trigger HTML5 Compositions´ on codepen.io](https://codepen.io/singular/pen/XgapYw). 
 
 ```html
   <script>

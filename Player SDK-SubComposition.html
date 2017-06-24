@@ -11,15 +11,23 @@
     <body style='background-color: lightgrey'>
         <!-- Comments -- START -->
         <h1>Singular Player SDK - Handling Sub-Compositions</h1>
-        <h3>This example shows how to hosts the Singular Player in an iFrame, load a composition and handle sub-compositions of a composition..</h3>
+        <p>last updated: 2017-06-23</p>
+        <h3>This example shows how to host the Singular Player in an iFrame, load a HTML5 graphics composition and handle sub-compositions of a composition.</h3>
+
+        <!-- load Singular Player into iFrame -->
+        <div>
+            <!-- define iframe size with aspect ratio 16:9 -->
+            <iframe id="SingularPlayer" style='width:720px; height: 405px; border: solid 1px black' src="https://app.singular.live/singularplayer/client"></iframe>
+        </div>
+        <div><b id='status'>Status: </b></div>
+
         <p>The composition is referenced by the unique id of the composition. Try following id's to load compositions with different layouts:</p>
         <ul style="list-style-type:none">
-            <li>ID=8701: Name="Player-SDK-Diner"</li>
-            <li><b>ID=8702: Name="Player-SDK-Spring Forward (default)"</b></li>
-            <li>ID=8703: Name="Player-SDK-Blue"</li>
-            <li>ID=8704: Name="Player-SDK-Strawberry"</li>
-            <li>ID=8705: Name="Player-SDK-Lime"</li>
-            <li>ID=8706: Name="Player-SDK-Lighthouse"</li>
+            <li><b>ID=8865: Name="Player-SDK-Spring Forward-WebCam" (default)"</b></li>
+            <li>ID=8856: Name="Player-SDK-Spring Forward</li>
+            <li>ID=8857: Name="Player-SDK-Diner"</li>
+            <li>ID=8860: Name="Player-SDK-Lime"</li>
+            <li>ID=8861: Name="Player-SDK-Lighthouse"</li>
         </ul>
 
         <p>Singular Player SDK description: <a href="https://singularlive.zendesk.com/hc/en-us/categories/115000487507-Developer-Documentation">helpdesk.singular.live</a></p>
@@ -33,11 +41,12 @@
 
                 $('#control').hide();
 
-                // create player object from iframe 'splayer'
-                player = SingularPlayer("splayer");
+                // create player object from iframe 'SingularPlayer'
+                player = SingularPlayer("SingularPlayer");
 
-                player.loadComposition(8702, function compositionLoaded() {
+                player.loadComposition(8865, function compositionLoaded() {
                     $('#control').show();
+                    $('#status').text('INFO: Composition loaded');
                 });
 
                 // Listen to error report
@@ -97,12 +106,6 @@
  
         <div>
 
-            <!-- load Singular Player into iFrame -->
-            <div>
-                <iframe id="splayer" style='width:1280px; height: 720px; border: solid 1px black' src="https://beta.singular.live/singularplayer/client"></iframe>
-            </div>
-            <div id='status'></div>
-        
             <!-- add controls for sub-compositions -->
             <div style='position:relative; top:5px' id='control'>
                 <div>EventBug 
