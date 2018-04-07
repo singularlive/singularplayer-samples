@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>PlayerSDK-Sequence Playout</title>
+
+    <style>
+        body {
+            font-family: 'Arimo', sans-serif;
+            ;
+            background-color: #666666;
+            color: lightgrey;
+            text-align: left;
+        }
+        
+        h1 {
+            color: lightgrey;
+            font-size: 25px;
+            text-align: center;
+        }
+        
+        p {
+            font-size: 15px;
+            color: lightgrey;
+            text-align: center;
+        }
+        
+        table,
+        tr {
+            border: 10px solid transparent;
+            align-items: stretch;
+            white-space: nowrap;
+            width: 100%;
+        }
+        
+        .navigation {
+            flex-wrap: wrap;
+            display: inline-block;
+            width: 100%;
+            align-content: flex-start;
+            flex-direction: row;
+        }
+        
+        div button,
+        .dropbtn {
+            display: inline-block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            background-color: grey;
+            border: solid 0px black;
+        }
+        
+        div button:hover,
+        .dropdown:hover .dropbtn {
+            background-color: #88a1b9;
+            border: solid 0px black;
+        }
+        
+        div.dropdown {
+            display: inline-block;
+        }
+        
+        div.controlButtons {
+            display: inline-block;
+            margin-bottom: 7px;
+        }
+        
+        .restartSequence {
+            margin-left: 20px;
+            position: relative;
+            font-size: 15px;
+        }
+        
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            z-index: 1;
+        }
+        
+        .dropdown-content button {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            text-align: left;
+            width: 193px;
+            border-bottom: solid 2px black;
+            display: relative;
+        }
+        
+        .dropdown-content button:hover {
+            background-color: #f1f1f1;
+            border-bottom: solid 2px #bbbbbb;
+        }
+        
+        .dropdown:hover .dropdown-content {
+            display: block;
+            margin-top: 46px;
+        }
+        
+        .dropdown a {
+            font-size: 15px;
+            width: 10.3rem;
+            text-align: left;
+            float: left;
+            padding-left: 10px;
+        }
+        /*DropdownArrows*/
+        /*--------------*/
+        /*--------------*/
+        
+        .custom-dropdown {
+            position: relative;
+            display: inline-block;
+            vertical-align: middle;
+            margin-bottom: -16px;
+        }
+        
+        .custom-dropdown::before,
+        .custom-dropdown::after {
+            content: "";
+            position: absolute;
+            pointer-events: none;
+        }
+        
+        .custom-dropdown::after {
+            /*  Custom dropdown arrow */
+            content: "\25BC";
+            height: 1em;
+            font-size: .625em;
+            line-height: 1;
+            right: 1.2em;
+            top: 50%;
+            margin-top: -3px;
+        }
+        
+        .custom-dropdown::before {
+            /*  Custom dropdown arrow cover (dark-gray)*/
+            width: 2em;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            border-radius: 0 3px 3px 0;
+        }
+        
+        .custom-dropdown select[disabled] {
+            color: rgba(0, 0, 0, 0.3);
+        }
+        
+        .custom-dropdown select[disabled]::after {
+            color: rgba(0, 0, 0, .3);
+        }
+        
+        .custom-dropdown::before {
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+        
+        .custom-dropdown::after {
+            color: rgba(0, 0, 0, .4);
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <html>
+
+    <head>
+        <link href="https://fonts.googleapis.com/css?family=Arimo" rel="stylesheet">
+        <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+
+        <script src="https://libs.singular.live/singularplayer/0.1.1/singularplayer.js"></script>
+
+    </head>
+
+    <body>
+        <!-- Comments -- START -->
+        <h1>Singular Player SDK - Using and Defining Sequences</h1>
+        <p>last updated: 2018-02-14 Simon</p>
+        <h3>This example shows how to host the Singular Player in an iFrame, load a HTML5 graphics composition and defining payloads and timings for the sequencer playout.</h3>
+
+        <div class="controlButtons">
+            <div class="button">
+                <div class="dropdown">
+                    <a href="javascript:void(0)" class="dropbtn custom-dropdown">Composition Selector</a>
+                    <div class="dropdown-content">
+                        <button onclick='compositionLoader(8856)'>Spring (ID=8856)</button>
+                        <button onclick='compositionLoader(8857)'>Diner (ID=8857)</button>
+                        <button onclick='compositionLoader(8898)'>Passport (ID=8898)</button>
+                    </div>
+                </div>
+                <button class="restartSequence" onclick='startAllSequencers()'>Restart Sequence</button>
+            </div>
+        </div>
+
+        <!-- load Singular Player into iFrame -->
+        <div>
+            <!-- define iframe size with aspect ratio 16:9 -->
+            <iframe id="SingularPlayer" style='width:720px; height: 405px; border: solid 1px black' src="https://app.singular.live/singularplayer/client"></iframe>
+        </div>
+        <div><b id='status'>Status: </b></div>
+        <p>Singular Developer Docs: <a href="https://singularlive.zendesk.com/hc/en-us/categories/115000487507-DEVELOPER-DOCS">singularlive.zendesk.com</a></p>
+        <p>Singular on github: <a href="https://github.com/singularlive">github.com/singularlive</a></p>
+        <!--        <p>Visit us at: <a href="https://www.singular.live">www.singular.live</a></p> -->
+        <!-- Comments -- END -->
+
+    </body>
+
+    </html>
+
+    <script>
+        // www.singular.live
+        // define Singular Player instance
+        var player;
+        // define payload instance
+        var payload;
+
+        $(document).ready(function() {
+
+            // create player object from iframe 'SingularPlayer'
+            player = SingularPlayer("SingularPlayer");
+
+            compositionLoader(8856);
+
+            // start playing all sequences
+            //                var sequencer = player.getMainComposition().sequencer;
+            //                sequencer.start();
+
+            startAllSequencers();
+
+            // Listen to error report
+            player.addListener('error', function(event, msg) {
+                if (event == 'error')
+                    $('#status').text(msg.error.message);
+            });
+        });
+
+        function compositionLoader(id) {
+            player.loadComposition(id, function compositionLoaded() {
+                $('#status').text('INFO: Composition loaded');
+
+                // get subcomposition named "Ticker" and goto animation state "Out"
+                var subTicker = player.getMainComposition().find('Ticker')[0];
+                subTicker.playTo('Out');
+                // get sequencer instance and set payload
+                var seqTicker = subTicker.getSequencer();
+                payload = [{
+                    "beginTime": 2,
+                    "endTime": 17,
+                    "controlNode": {
+                        "payload": {
+                            "Title": "SINGULAR",
+                            "Text Field": "This is text is updated by the Singular Player SDK defining a playload in the sequencer. ...(will change after 15sec)"
+                        }
+                    }
+                }, {
+                    "beginTime": 17,
+                    "endTime": 35,
+                    "controlNode": {
+                        "payload": {
+                            "Title": "SINGULAR",
+                            "Text Field": "Check out www.singular.live and visit github.com/singularlive for more information! ...(off after 15sec)"
+                        }
+                    }
+                }];
+                // Set payload to the sequencer
+                seqTicker.setPayload(payload);
+                // optional start ticker sequence independently
+                // seqTicker.start();
+
+                // get subcomposition named "EventBug" and goto animation state "In"
+                var subEventBug = player.getMainComposition().find('EventBug')[0];
+                subEventBug.playTo('In');
+                // get sequencer instance and set payload
+                var seqEventBug = subEventBug.getSequencer();
+                payload = [{
+                    "beginTime": 0,
+                    "endTime": 10,
+                    "controlNode": {
+                        "payload": {
+                            "Event": "Playing Live"
+                        }
+                    }
+                }, {
+                    "beginTime": 11,
+                    "endTime": 20,
+                    "controlNode": {
+                        "payload": {
+                            "Event": "Singular Sequencer SDK"
+                        }
+                    }
+                }, {
+                    "beginTime": 21,
+                    "endTime": 60,
+                    "controlNode": {
+                        "payload": {
+                            "Event": "Playing Live"
+                        }
+                    }
+                }];
+                // Set payload to the sequencer
+                seqEventBug.setPayload(payload);
+
+                // get subcomposition named "LocationBug" and goto animation state "In"
+                var subLocationBug = player.getMainComposition().find('LocationBug')[0];
+                subLocationBug.playTo('In');
+                // get sequencer instance and set payload
+                var seqLocationBug = subLocationBug.getSequencer();
+                payload = [{
+                    "beginTime": 0,
+                    "endTime": 15,
+                    "controlNode": {
+                        "payload": {
+                            "Location": "Bangkok, THAI"
+                        }
+                    }
+                }, {
+                    "beginTime": 16,
+                    "endTime": 30,
+                    "controlNode": {
+                        "payload": {
+                            "Location": "Burbank, USA"
+                        }
+                    }
+                }, {
+                    "beginTime": 31,
+                    "endTime": 60,
+                    "controlNode": {
+                        "payload": {
+                            "Location": "Munich, GER"
+                        }
+                    }
+                }];
+                // Set payload to the sequencer
+                seqLocationBug.setPayload(payload);
+
+                // get subcomposition named "1 Line Topic Bar" and goto animation state "Out"
+                var sub1LineTopicBar = player.getMainComposition().find('1 Line Topic Bar')[0];
+                sub1LineTopicBar.playTo('Out');
+                // get sequencer instance and set payload
+                var seq1LineTopicBar = sub1LineTopicBar.getSequencer();
+                payload = [{
+                    "beginTime": 5,
+                    "endTime": 20,
+                    "controlNode": {
+                        "payload": {
+                            "Text": "Hello everyone and thanks for checking out the Singular Player SDK. You are watching a pre-defined sequence playing in realtime in your browser."
+                        }
+                    }
+                }];
+                // Set payload to the sequencer
+                seq1LineTopicBar.setPayload(payload);
+
+                // get subcomposition named "2 Line Topic Bar" and goto animation state "In"
+                var sub2LineTopicBar = player.getMainComposition().find('2 Line Topic Bar')[0];
+                sub2LineTopicBar.playTo('Out');
+                // get sequencer instance and set payload
+                var seq2LineTopicBar = sub2LineTopicBar.getSequencer();
+                payload = [{
+                    "beginTime": 23,
+                    "endTime": 60,
+                    "controlNode": {
+                        "payload": {
+                            "Title": "SINGULAR Player SDK",
+                            "Text": "Hello again! All html5 graphic elements in this composition are playing in realtime in your browser."
+                        }
+                    }
+                }];
+                // Set payload to the sequencer
+                seq2LineTopicBar.setPayload(payload);
+
+                // get subcomposition named "Side Panel Picture" and goto animation state "Out"
+                var subSidePanelPicture = player.getMainComposition().find('Side Panel Picture')[0];
+                subSidePanelPicture.playTo('Out');
+                // get sequencer instance and set payload
+                var seqSidePanelPicture = subSidePanelPicture.getSequencer();
+                payload = [{
+                    "beginTime": 3,
+                    "endTime": 10,
+                    "controlNode": {
+                        "payload": {
+                            "Title": "This is our CEO...",
+                            "Picture": "https://static.wixstatic.com/media/32de7c_c05cf8d3d3314c7ba47db39754092146~mv2_d_3107_2331_s_2.jpg/v1/fill/w_1610,h_1208,al_c,q_90,usm_0.66_1.00_0.01/32de7c_c05cf8d3d3314c7ba47db39754092146~mv2_d_3107_2331_s_2.webp"
+                        }
+                    }
+                }, {
+                    "beginTime": 10,
+                    "endTime": 15,
+                    "controlNode": {
+                        "payload": {
+                            "Title": "this is our CTO...",
+                            "Picture": "https://static.wixstatic.com/media/32de7c_763f871a01454ab7afad17eb72e54361~mv2_d_2726_2045_s_2.jpg/v1/fill/w_1610,h_1208,al_c,q_90,usm_0.66_1.00_0.01/32de7c_763f871a01454ab7afad17eb72e54361~mv2_d_2726_2045_s_2.webp"
+                        }
+                    }
+                }, {
+                    "beginTime": 15,
+                    "endTime": 17,
+                    "controlNode": {
+                        "payload": {
+                            "Title": "and this is me...",
+                            "Picture": "https://static.wixstatic.com/media/32de7c_34eb36d48f8d4c77b4c405c235aa3804~mv2.png/v1/fill/w_386,h_329,al_c,lg_1/32de7c_34eb36d48f8d4c77b4c405c235aa3804~mv2.png"
+                        }
+                    }
+                }];
+                // Set payload to the sequencer
+                seqSidePanelPicture.setPayload(payload);
+
+                // get subcomposition named "Side Panel Text" and goto animation state "Out"
+                var subSidePanelText = player.getMainComposition().find('Side Panel Text')[0];
+                subSidePanelText.playTo('Out');
+                // get sequencer instance and set payload
+                var seqSidePanelText = subSidePanelText.getSequencer();
+                payload = [{
+                    "beginTime": 20,
+                    "endTime": 60,
+                    "controlNode": {
+                        "payload": {
+                            "Title": "Singular.live",
+                            "Text": "DATA DRIVEN GRAPHICS FOR LIVE WEB BROADCAST. Checkout www.singular.live, github.com/singularlive, codepen.io/singular"
+                        }
+                    }
+                }];
+                // Set payload to the sequencer
+                seqSidePanelText.setPayload(payload);
+
+                // start playing all sequences
+                var sequencer = player.getMainComposition().sequencer;
+                sequencer.start();
+
+                $("#status").text("INFO: Composition loaded");
+            });
+        };
+
+        function startAllSequencers() {
+            var sequencer = player.getMainComposition().sequencer;
+            sequencer.seek(0.0);
+            sequencer.start();
+            //                    player.getSequencer(beginTime, function sequencer.start() {
+            //                        $("#status").text("INFO: Sequence loaded");
+            //                    });
+        };
+    </script>
+
+</body>
+
+</html>
