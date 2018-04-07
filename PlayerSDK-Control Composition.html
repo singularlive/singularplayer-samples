@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <title>Singular SDK - Control and Trigger HTML5 Compositions</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Arimo" rel="stylesheet">
+    <link href="//ajax.googleapis.com/ajax/libs/prototype/1.7.1/prototype.js">
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+
+    <style>
+        body {
+            font-family: 'Arimo', sans-serif;
+            ;
+            background-color: #595959;
+            color: lightgrey;
+            text-align: left;
+        }
+        
+        h1 {
+            color: lightgrey;
+            font-size: 25px;
+            text-align: center;
+        }
+        
+        p {
+            font-size: 15px;
+            color: lightgrey;
+            text-align: center;
+        }
+        
+        table,
+        tr {
+            border: 0px solid black;
+            align-items: stretch;
+            white-space: nowrap;
+            width: 100%;
+        }
+        /*Set-Buttons----------------------------*/
+        
+        i.material-icons {
+            font-size: 1rem;
+            color: white;
+            position: relative;
+            border-radius: 50%;
+            padding: 5px;
+            margin: 3px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+            transition: color 0.2s ease, background-color 0.2s ease, transform 0.3s ease;
+        }
+        
+        i.material-icons:after {
+            content: "";
+            width: 100%;
+            height: 100%;
+            border: solid 2px;
+            transform: scale(0.8);
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+        
+        i.material-icons:hover:after {
+            transform: scale(1);
+            box-shadow: 10px 0 20px rgba(0, 0, 0, 0.19), 6px 0 6px rgba(0, 0, 0, 0.23);
+        }
+        
+        i.material-icons:nth-of-type(1) {
+            background-color: #88a1b9;
+        }
+        
+        i.material-icons:nth-of-type(1):hover {
+            color: #88a1b9;
+            z-index: 1;
+            background-color: #fff;
+        }
+        
+        i.material-icons:nth-of-type(1):after {
+            border-color: #88a1b9;
+        }
+        /*Set-Buttons-END------------------------*/
+        
+        .navigation {
+            flex-wrap: wrap;
+            display: inline-block;
+            width: 100%;
+            align-content: flex-start;
+            flex-direction: row;
+        }
+        
+        div button,
+        .dropbtn {
+            display: inline-block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            background-color: grey;
+            border: dotted 1px black;
+        }
+        
+        div button:hover,
+        .dropdown:hover .dropbtn {
+            background-color: #88a1b9;
+            border: dotted 1px black;
+        }
+        
+        div.dropdown {
+            display: inline-block;
+        }
+        
+        div.controlButtons {
+            display: inline;
+        }
+        
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            z-index: 1;
+        }
+        
+        .dropdown-content button {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            text-align: left;
+            width: 193px;
+            border: dotted 1px black;
+            display: relative;
+        }
+        
+        .dropdown-content button:hover {
+            background-color: #f1f1f1
+        }
+        
+        .dropdown:hover .dropdown-content {
+            display: block;
+            margin-top: 46px;
+        }
+        
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 24px;
+        }
+        
+        .switch input {
+            display: none;
+        }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+        
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 4px;
+            bottom: 3px;
+            background-color: white;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+        
+        input:checked + .slider {
+            background-color: #97F9BB;
+        }
+        
+        input:focus + .slider {
+            box-shadow: 0 0 1px #97F9BB;
+        }
+        
+        input:checked + .slider:before {
+            -webkit-transform: translateX(26px);
+            -ms-transform: translateX(26px);
+            transform: translateX(36px);
+        }
+        
+        .dropdown a {
+            font-size: 15px;
+            width: 10.3rem;
+            text-align: left;
+            float: left;
+            padding-left: 10px;
+        }
+        /*DropdownArrows*/
+        /*--------------*/
+        /*--------------*/
+        
+        .custom-dropdown {
+            position: relative;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        
+        .custom-dropdown select {
+            color: #fff;
+            font-size: inherit;
+            padding: .5em;
+            padding-right: 2.5em;
+            border: 0;
+            margin: 0;
+            border-radius: 3px;
+            text-indent: 0.01px;
+            text-overflow: '';
+            -webkit-appearance: button;
+            /* hide default arrow in chrome OSX */
+        }
+        
+        .custom-dropdown::before,
+        .custom-dropdown::after {
+            content: "";
+            position: absolute;
+            pointer-events: none;
+        }
+        
+        .custom-dropdown::after {
+            /*  Custom dropdown arrow */
+            content: "\25BC";
+            height: 1em;
+            font-size: .625em;
+            line-height: 1;
+            right: 1.2em;
+            top: 50%;
+            margin-top: -3px;
+        }
+        
+        .custom-dropdown::before {
+            /*  Custom dropdown arrow cover (dark-gray)*/
+            width: 2em;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            border-radius: 0 3px 3px 0;
+        }
+        
+        .custom-dropdown select[disabled] {
+            color: rgba(0, 0, 0, 0.3);
+        }
+        
+        .custom-dropdown select[disabled]::after {
+            color: rgba(0, 0, 0, .1);
+        }
+        
+        .custom-dropdown::before {
+            background-color: rgba(0, 0, 0, 0.2);
+        }
+        
+        .custom-dropdown::after {
+            color: rgba(0, 0, 0, .4);
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <head>
+        <!-- Include the Singular Player JavaSrcipt library -->
+        <script src="https://app.singular.live/libs/singularplayer/0.1.2/singularplayer.js"></script>
+    </head>
+
+    <!-- Comments -- START -->
+    <h1>Singular Player SDK - Handling Sub-Compositions</h1>
+    <p>last updated: 2018-04-07 tm</p>
+
+    <h3>This example shows how to host the Singular Player in an iFrame, load a HTML5 graphics composition and handle sub-compositions of a composition.</h3>
+
+    <table>
+        <tr>
+            <td>
+                <!-- load Singular Player into iFrame -->
+                <iframe id="SingularPlayer" style='width:720px; height: 400px; border: solid 1px black' src="https://app.singular.live/singularplayer/client"></iframe>
+            </td>
+
+            <!-- add controls for sub-compositions -->
+            <td>
+                <div class="dropdown">
+                    <a href="javascript:void(0)" class="dropbtn custom-dropdown">Composition Selector</a>
+                    <div class="dropdown-content">
+                        <button onclick='compositionLoader(9178)'>Spring (ID=9178)</button>
+                     </div>
+                </div>
+
+                <table>
+                    <!--EVENT-BUG--------->
+                    <tr>
+                        <td>EventBug
+                            <p id="EventBugStatus"></p>
+                        </td>
+                        <td>
+                            <input type='text' id='EventBug'>
+                        </td>
+                        <td><i class="material-icons" onclick='setText("EventBug")'>mode_edit</i></td>
+                        <td>
+                            <label class="switch">
+                                <input id="EventBugSwitch" type="checkbox" checked onclick='showSubcomp2("EventBug")'>
+                                <span class="slider"></span>
+                            </label>
+                        </td>
+                    </tr>
+                    <!--LOCATION-BUG------>
+                    <tr>
+                        <td>LocationBug</td>
+                        <td>
+                            <input type='text' id='LocationBug'>
+                        </td>
+                        <td><i class="material-icons" onclick='setText("LocationBug")'>mode_edit</i></td>
+                        <td>
+                            <label class="switch">
+                                <input id="LocationBugSwitch" type="checkbox" checked onclick='showSubcomp2("LocationBug")'>
+                                <span class="slider"></span>
+                            </label>
+                        </td>
+                    </tr>
+                    <!--1-LINE-TOPIC-BAR-->
+                    <tr>
+                        <td>1 Line Topic Bar</td>
+                        <td>
+                            <input type='text' id='1TopicText'>
+                        </td>
+                        <td><i class="material-icons" onclick='setText("1 Line Topic Bar")'>mode_edit</i></td>
+                        <td>
+                            <label class="switch">
+                                <input id="1 Line Topic BarSwitch" type="checkbox" onclick='showSubcomp2("1 Line Topic Bar")'>
+                                <span class="slider"></span>
+                            </label>
+                        </td>
+                    </tr>
+                    <!--2-LINE-TOPIC-BAR-->
+                    <tr>
+                        <td>2 Line Topic Bar</td>
+                        <td>
+                            <input type='text' id='2TopicTitle'>
+                        </td>
+                        <td><i class="material-icons" onclick='setText("2 Line Topic Bar")'>mode_edit</i></td>
+                        <td>
+                            <label class="switch">
+                                <input id="2 Line Topic BarSwitch" type="checkbox" checked onclick='showSubcomp2("2 Line Topic Bar")'>
+                                <span class="slider"></span>
+                            </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>
+                            <input type='text' id='2TopicText'>
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <!--TICKER------------>
+                    <tr>
+                        <td>Ticker</td>
+                        <td>
+                            <input type='text' id='TickerTitle'>
+                        </td>
+                        <td><i class="material-icons" onclick='setText("Ticker")'>mode_edit</i></td>
+                        <td>
+                            <label class="switch">
+                                <input id="TickerSwitch" type="checkbox" checked onclick='showSubcomp2("Ticker")'>
+                                <span class="slider"></span>
+                            </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>
+                            <input type='text' id='TickerText'>
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <!--SIDE-PANEL-IMAGE-->
+                    <tr>
+                        <td>Side Panel Image</td>
+                        <td>
+                            <label class="switch">
+                                <input id="Side Panel PictureSwitch" type="checkbox" checked onclick='showSubcomp2("Side Panel Picture")'>
+                                <span class="slider"></span>
+                            </label>
+                        </td>
+                    </tr>
+                    <!--SIDE-PANEL-TEXT-->
+                    <tr>
+                        <td>Side Panel Text</td>
+                        <td>
+                            <label class="switch">
+                                <input id="Side Panel TextSwitch" type="checkbox" onclick='showSubcomp2("Side Panel Text")'>
+                                <span class="slider"></span>
+                            </label>
+                        </td>
+                    </tr>
+                    <!--BACKGROUND-IMAGE-->
+                    <tr>
+                        <td>Background Image</td>
+                        <td>
+                            <label class="switch">
+                                <input id="BackgroundImageSwitch" type="checkbox" checked onclick='showSubcomp2("BackgroundImage")'>
+                                <span class="slider"></span>
+                            </label>
+                        </td>
+                    </tr>
+                    <!--BACKGROUND-WEBCAM-->
+                    <tr>
+                        <td>Background WebCam</td>
+                        <td>
+                            <label class="switch">
+                                <input id="BackgroundWebCamSwitch" type="checkbox" onclick='showSubcomp2("BackgroundWebCam")'>
+                                <span class="slider"></span>
+                            </label>
+                        </td>
+                    </tr>
+
+                </table>
+
+            </td>
+        </tr>
+    </table>
+
+    <div><b id='status'>Status: </b></div>
+
+    <p>Singular Player SDK description: <a href="https://singularlive.zendesk.com/hc/en-us/categories/115000487507-Developer-Documentation">helpdesk.singular.live</a></p>
+    <p>Singular on github: <a href="https://github.com/singularlive">github.com/singularlive</a></p>
+    <p>Visit us at: <a href="https://www.singular.live">www.singular.live</a></p>
+    <!-- Comments -- END -->
+
+    <script>
+        // add singular player
+        var player;
+
+        $(document).ready(function() {
+            $("#control").hide();
+
+            // create player object from iframe 'SingularPlayer'
+            player = SingularPlayer("SingularPlayer");
+
+            compositionLoader(9178);
+
+            // Listen to error report
+            player.addListener("error", function(event, msg) {
+                if (event == "error") $("#status").text(msg.error.message);
+            });
+        });
+
+        function setText(id) {
+            var subComp = player.getMainComposition().find(id)[0];
+            if (id == "EventBug") {
+                var text = $("#EventBugState").val();
+
+                subComp.setPayload({
+                    Event: text
+                });
+            } else if (id == "LocationBug") {
+                var text = $("#LocationBug").val();
+                subComp.setPayload({
+                    Location: text
+                });
+            } else if (id == "1 Line Topic Bar") {
+                var text = $("#1TopicText").val();
+                subComp.setPayload({
+                    Text: text
+                });
+            } else if (id == "2 Line Topic Bar") {
+                var text = $("#2TopicTitle").val();
+                subComp.setPayload({
+                    Title: text
+                });
+                var text = $("#2TopicText").val();
+                subComp.setPayload({
+                    Text: text
+                });
+            } else if (id == "Ticker") {
+                var text = $("#TickerTitle").val();
+                subComp.setPayload({
+                    Title: text
+                });
+                var text = $("#TickerText").val();
+                subComp.setPayload({
+                    "Text Field": text
+                });
+            }
+        }
+
+        function showSubcomp(id, show) {
+            var subComp = player.getMainComposition().find(id)[0];
+            if (show || show === undefined) subComp.playTo("In");
+            else subComp.playTo("Out");
+        }
+
+        function showSubcomp2(id) {
+            var subComp = player.getMainComposition().find(id)[0];
+            var state = document.getElementById(id + 'Switch').checked;
+            if (state == true) {
+                subComp.playTo("In");
+                if (id == '2 Line Topic Bar') document.getElementById('1 Line Topic BarSwitch').checked = false;
+                if (id == '1 Line Topic Bar') document.getElementById('2 Line Topic BarSwitch').checked = false;
+                if (id == 'Side Panel Picture') document.getElementById('Side Panel TextSwitch').checked = false;
+                if (id == 'Side Panel Text') document.getElementById('Side Panel PictureSwitch').checked = false;
+                if (id == 'BackgroundImage') document.getElementById('BackgroundWebCamSwitch').checked = false;
+                if (id == 'BackgroundWebCam') document.getElementById('BackgroundImageSwitch').checked = false;
+            } else subComp.playTo("Out");
+        }
+
+        //     var x = document.getElementById("slider_1").checked;
+
+        function compositionLoader(id) {
+            player.renderAppOutput(id, undefined, function compositionLoaded() {
+                $("#control").show();
+                $("#status").text("INFO: Composition loaded");
+            });
+        }
+    </script>
+
+</body>
+
+</html>
